@@ -1,0 +1,25 @@
+pipeline {
+    agent any 
+
+    stages {
+        stage('Cloning Git Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Bhartendu08/Devops-TwoTier--Flask_Project.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Building the image locally on the Jenkins runner
+                sh 'docker build -t flask-app:latest .'
+            }
+        }
+
+        stage('Deploying with Docker Compose') {
+            steps {
+                sh 'docker-compose down || true'
+                sh 'docker-compose up -d'
+            }
+        }
+    }
+}
